@@ -1,4 +1,4 @@
-#strands-stats Architecture
+# strands-stats Architecture
 
 # Accounts
 
@@ -7,6 +7,7 @@ Accounts involved in this:
 * Admin account - set up new accounts - Chrome
 * Developer account (mrp) - set up back-end infrastructure - Chrome Incognito
 ** Storage Admin on the project
+** GitHub account owner
 * Email account (games) - safari
 
 # Email
