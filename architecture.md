@@ -26,7 +26,7 @@ Using a dedicated mailbox is important because, according to Google Gemini Pro, 
 
 Scripts are managed from script.google.com
 
-# Storage Bucket
+# Storage Buckets
 
 **snvn-strands-stats-tf**: this appears to be a bucket I created for storing terraform state. I will probably delete this, as for this project, I think Terraform may be overkill, especially since it isn't great for deploying Cloud Functions.
 
@@ -36,6 +36,9 @@ Scripts are managed from script.google.com
 * enforce not public
 * added lifecycle policy to delete any object over 30 days old. Should reduce this once things are up and running smoothly. Cloud Function might also delete.
 * Region: central1 (low cost, low CO2 (east1 has higher CO2))
+
+**snvn-email-failures**
+* same as above
 
 # App Script
 
