@@ -9,6 +9,7 @@ Accounts involved in this:
   * Storage Admin on the project
   * GitHub account owner
 * Email account (games) - safari
+  * App Script owner
 
 # Email
 A special mailbox setup for account games@sennovation.com to recieve emails. An Apps Script runs every N minutes (N can be set)
