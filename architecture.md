@@ -1,8 +1,8 @@
 # strands-stats Architecture
 
-# Accounts
+# Identity & Access Management (IAM)
 
-Accounts involved in this:
+Accounts involved:
 
 * Admin account - set up new accounts - Chrome
 * Developer account (mrp) - set up back-end infrastructure - Chrome Incognito
@@ -10,6 +10,8 @@ Accounts involved in this:
   * GitHub account owner
 * Email account (games) - safari
   * App Script owner
+  * Temporarily Storage Bucket Admin on the Bucket just for linking the apps script
+  * Storage Object Creator on the specific bucket
 
 # Email
 A special mailbox setup for account games@sennovation.com to recieve emails. An Apps Script runs every N minutes (N can be set)
@@ -34,4 +36,28 @@ Scripts are managed from script.google.com
 * enforce not public
 * added lifecycle policy to delete any object over 30 days old. Should reduce this once things are up and running smoothly. Cloud Function might also delete.
 * Region: central1 (low cost, low CO2 (east1 has higher CO2))
+
+# App Script
+
+# Firestore Databases
+All databases not public, use Google-managed encryption
+
+## accounts
+
+* creation date
+* hashed email (salted? if so, with what?)
+* password - hashed (salted with creation date?)
+* account UUID - not sure this is necessary, why not just use hashed email?
+
+## games
+
+* date
+* hashed email
+* game number
+* game title
+* results
+
+## stats
+
+Can create this later if wanted. Idea is to keep a stats table that we update every time, so one doesn't need to create stats when viewed
 
