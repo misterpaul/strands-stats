@@ -15,6 +15,10 @@
   * enabled GMail API in the project
 * [x] validate emails are in bucket
 * [ ] work on cloud function
+* [ ] create gui
+  * [ ] register
+  * [ ] authenticate
+  * [ ] see stats
 * [x] create firestore databases
 * [ ] reduce storage bucket lifetime
 * [ ] delete emails that have been flagged as "done" for over N days
