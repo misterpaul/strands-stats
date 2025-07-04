@@ -26,6 +26,8 @@ Using a dedicated mailbox is important because, according to Google Gemini Pro, 
 
 Scripts are managed from script.google.com
 
+We have a Filter in the mailbox that identifies relevant emails and applies a label to them. 
+
 # Storage Buckets
 
 **snvn-strands-stats-tf**: this appears to be a bucket I created for storing terraform state. I will probably delete this, as for this project, I think Terraform may be overkill, especially since it isn't great for deploying Cloud Functions.
@@ -41,6 +43,18 @@ Scripts are managed from script.google.com
 * same as above
 
 # App Script
+
+We use Google App Script to copy each labeled email to a storage bucket.
+
+TODO: 
+Add more logic in the script (or new scripts) to
+1. Handle emails from unregistered accounts - do we delete them? Do we hold on to the first per day and reply with info to register?
+1. only put the email in the bucket if
+ 1. the user is registered
+ 2. there are no existing entries for the day
+2. Block the user if more than N emails sent
+  
+It is important for this logic to be at this stage to prevent a user that sends excessive emails from running up storage bucket and cloud function costs.
 
 # Firestore Databases
 All databases not public, use Google-managed encryption
@@ -64,3 +78,6 @@ All databases not public, use Google-managed encryption
 
 Can create this later if wanted. Idea is to keep a stats table that we update every time, so one doesn't need to create stats when viewed
 
+# Cloud Function
+
+We use a cloud function to parse the email files in the storage bucket and store the data in Firestore database.
