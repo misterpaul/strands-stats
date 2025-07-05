@@ -68,14 +68,16 @@ It is important for this logic to be at this stage to prevent a user that sends 
 # Firestore Databases
 All databases not public, use Google-managed encryption
 
-## accounts
+## accounts, accounts-testing
 
 * creation date
 * hashed email (salted? if so, with what?)
 * password - hashed (salted with creation date?)
+* handle - how you'll be known to others who you allow to see your data
+* visibility - what visibility to allow user's data. (all private, stats friends, all friends, stats public, all public; Or maybe stats:private/friends/public; raw:private/friends/public)
 * account UUID - not sure this is necessary, why not just use hashed email?
 
-## games
+## games, games-testing
 
 * date
 * hashed email
