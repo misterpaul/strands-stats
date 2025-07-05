@@ -23,6 +23,17 @@ The deployment command has been updated to use the `--set-env-vars` flag to secu
 3. Local Testing Guide Update
 The local testing guide is updated to show how to provide the environment variable on your Mac.
 
+# Request
+
+replace
+resultsLines.join('\n');
+with
+resultsLines.join('');
+
+# Response
+
+Of course. I have updated the code in the JavaScript Cloud Function (Gen 2) - Process Email from GCS artifact to join the results lines with no separator.
+
 # updated index.js from #13 and #14
 
 ```
@@ -127,7 +138,7 @@ functions.cloudEvent('processIncomingEmailJs', async (cloudEvent) => {
         }
         
         if (resultsLines.length > 0) {
-            gameData.results = resultsLines.join('\n');
+            gameData.results = resultsLines.join('');
         }
         
         // --- ADDED: Validate extracted game data ---
