@@ -13,10 +13,11 @@ Accounts involved:
   * Temporarily Storage Bucket Admin on the Bucket just for linking the apps script
   * Storage Object Creator on the snvn-emails & snvn-email-testing bucket 
   * Storage Object Admin on the snvn-email-testing, snvn-email-success-testing, & snvn-email-failures-testing buckets to allow local testing with that account
-  * Firestore permissions TBD
+  * Firestore user. Unfortunately Firestore/Datastore only supports project-level permissions through GCP IAM. Any database-level permissioning is done via Firestore rules.
   * During local testing, this is the account to use for application default credentials (ADC) using `gcloud auth application-default login`
 * Cloud Function service account
   * Storage object admin on the snvn-emails, snvn-email-success, & snvn-email-failures buckets.
+  * Firestore user. Consider using Firestore rules to further control access (eg separate test/prod service accounts should have access only to the relevant databases.
 
 # Email
 A special mailbox setup for account games@sennovation.com to recieve emails. An Apps Script runs every N minutes (N can be set)
