@@ -15,11 +15,19 @@
   * enabled GMail API in the project
 * [x] validate emails are in bucket
 * [ ] work on cloud function
+  * [ ] fn to parse email and put in datastore - need to test locally, then as a function
+  * [ ] fn to iterate over all emails
 * [ ] create gui
   * [ ] register
   * [ ] authenticate
   * [ ] see stats
 * [x] create firestore databases
+* [ ] firestore IAM
+  * [ ] mrp
+  * [ ] test SA
+  * [ ] prod SA
+* [ ] firestore rules
 * [ ] reduce storage bucket lifetime
 * [ ] delete emails that have been flagged as "done" for over N days
 * [ ] delete emails that generate an alert
+* [ ] threat model
