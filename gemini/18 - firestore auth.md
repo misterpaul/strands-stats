@@ -38,8 +38,10 @@ Make sure your project directory is set up correctly with the function code and 
 
 If you haven't already, run `npm install` in your project directory to download the necessary packages.
 
-```cd /path/to/your/my-email-function-js
-npm install```
+```
+cd /path/to/your/my-email-function-js
+npm install
+```
 
 ## Step 2: Create a Sample Email File
 Create a new file in your project directory named `test-email.eml`. This file will contain the raw email content you want to test against.
