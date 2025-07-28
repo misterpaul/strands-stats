@@ -1,5 +1,6 @@
 // Google Apps Script Code (Code.gs)
 // Courtesy of Gemini
+// Updated to include sender whitelist functionality
 
 // --- CONFIGURATION ---
 // 1. The name of the Google Cloud Storage bucket you created.
@@ -14,24 +15,37 @@ const GMAIL_PROCESSING_LABEL = 'process-for-cloud-function';
 //    Create this label in your Gmail settings.
 const GMAIL_PROCESSED_LABEL = 'processed-by-script';
 
+// 4. The Gmail label to apply if an email has an invalid sender
+//    Create this label in your Gmail settings.
+const GMAIL_INVALID_SENDER = 'invalid-sender';
+
+// 5. The Gmail label to apply if an email failed processing
+//    Create this label in your Gmail settings.
+const GMAIL_PROCESSING_ERROR = 'processing-error';
+
+// 6. A list of sender email addresses that are allowed to be processed.
+//    Emails from senders NOT in this list will be skipped.
+const ALLOWED_SENDERS = [
+  'jane.doe@example.com',
+  'john.smith@example.com'
+  // Add more authorized email addresses here
+];
 
 /**
  * @description This is the main function to be run by a time-based trigger.
- * It searches for emails with the specified label, saves them to GCS,
+ * It searches for emails with the specified label, saves them to GCS if the sender is allowed,
  * and then updates their labels.
  */
 function processNewEmails() {
-  const processingLabel = Gmail.Users.Labels.get('me', GMAIL_PROCESSING_LABEL);
-  if (!processingLabel) {
-    console.error(`Error: Processing label "${GMAIL_PROCESSING_LABEL}" not found. Please create it in Gmail.`);
-    return;
-  }
-
-  const processedLabel = Gmail.Users.Labels.get('me', GMAIL_PROCESSED_LABEL);
-  if (!processedLabel) {
-    console.error(`Error: Processed label "${GMAIL_PROCESSED_LABEL}" not found. Please create it in Gmail.`);
-    return;
-  }
+  // confirm all labels exist
+  const labelArray = [GMAIL_PROCESSING_LABEL, GMAIL_PROCESSED_LABEL, GMAIL_INVALID_SENDER, GMAIL_PROCESSING_ERROR];
+  labelArray.forEach(item => {
+    const label = Gmail.Users.Labels.get('me', item);
+    if (!label) {
+      console.error(`Error: Processing label "${item}" not found. Please create it in Gmail.`);
+      return;
+    }
+  });
   
   // Search for threads with the processing label but not the processed label
   const query = `label:${GMAIL_PROCESSING_LABEL} -label:${GMAIL_PROCESSED_LABEL}`;
@@ -48,37 +62,63 @@ function processNewEmails() {
   const accessToken = ScriptApp.getOAuthToken();
 
   threads.forEach(thread => {
+    let wasAnythingUploaded = false; // Flag to track if we uploaded any message from this thread
     const messages = thread.getMessages();
+
     messages.forEach(message => {
+      // Safeguard: skip if the thread has already been marked as processed.
+      if (message.getThread().getLabels().some(label => label.getName() === GMAIL_PROCESSED_LABEL)) {
+          return; 
+      }
+
       try {
-        // Double-check this specific message hasn't been processed
-        if (message.getThread().getLabels().some(label => label.getName() === GMAIL_PROCESSED_LABEL)) {
-            return; // Skip if already processed
+        // Get the sender's email address, extracting it from "Name <email@addr.com>" format if necessary
+        const from = message.getFrom();
+        let senderEmail;
+        const emailMatch = from.match(/<(.+)>/);
+        if (emailMatch && emailMatch[1]) {
+          senderEmail = emailMatch[1];
+        } else {
+          senderEmail = from.trim(); // Assume the 'from' field is just the email, trim whitespace
         }
 
-        console.log(`Processing message: "${message.getSubject()}" (ID: ${message.getId()})`);
+        // Check if the sender is in the allowed list
+        if (ALLOWED_SENDERS.includes(senderEmail)) {
+          console.log(`Processing message: "${message.getSubject()}" (ID: ${message.getId()}) from allowed sender.`);
 
-        // Get the raw RFC 822 formatted email content
-        const rawContent = message.getRawContent();
+          // Get the raw RFC 822 formatted email content
+          const rawContent = message.getRawContent();
 
-        // Create a unique file name for the object in GCS
-        const fileName = `${message.getDate().toISOString()}_${message.getId()}.eml`;
+          // Create a unique file name for the object in GCS
+          const fileName = `${message.getDate().toISOString()}_${message.getId()}.eml`;
 
-        // Upload the file to Google Cloud Storage
-        uploadToGCS(fileName, rawContent, accessToken);
+          // Upload the file to Google Cloud Storage
+          uploadToGCS(fileName, rawContent, accessToken);
 
-        // Mark as processed by removing the old label and adding the new one
-        thread.removeLabel(GmailApp.getUserLabelByName(GMAIL_PROCESSING_LABEL));
-        thread.addLabel(GmailApp.getUserLabelByName(GMAIL_PROCESSED_LABEL));
-        
-        console.log(`Successfully processed and moved ${fileName} to GCS.`);
-
+          console.log(`Successfully uploaded ${fileName} to GCS.`);
+          wasAnythingUploaded = true; // Set flag to true as we've processed a file.
+          
+        } else {
+          console.log(`Skipping message from "${senderEmail}" because the sender is not in the allowed list. Subject: "${message.getSubject()}"`);
+          thread.addLabel(GmailApp.getUserLabelByName(GMAIL_INVALID_SENDER));
+        }
       } catch (e) {
         console.error(`Failed to process message ID ${message.getId()}. Error: ${e.toString()}`);
-        // Consider applying an "error" label here
+        thread.addLabel(GmailApp.getUserLabelByName(GMAIL_PROCESSING_ERROR));
       }
-    });
-  });
+    }); // End of messages loop
+
+    // After checking all messages, update the thread's labels.
+    if (wasAnythingUploaded) {
+      thread.addLabel(GmailApp.getUserLabelByName(GMAIL_PROCESSED_LABEL));
+      console.log(`Marked thread "${thread.getFirstMessageSubject()}" as processed.`);
+    } else {
+      console.log(`No messages from allowed senders found in thread "${thread.getFirstMessageSubject()}". Removing processing label.`);
+    }
+    
+    // Always remove the processing label to prevent the thread from being re-evaluated.
+    thread.removeLabel(GmailApp.getUserLabelByName(GMAIL_PROCESSING_LABEL));
+  }); // End of threads loop
 }
 
 /**
@@ -89,19 +129,16 @@ function processNewEmails() {
  */
 function uploadToGCS(fileName, fileContent, accessToken) {
   const url = `https://storage.googleapis.com/upload/storage/v1/b/${GCS_BUCKET_NAME}/o?uploadType=media&name=${encodeURIComponent(fileName)}`;
-  
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
     'Content-Type': 'message/rfc822' // Standard MIME type for email files
   };
-
   const options = {
     method: 'post',
     headers: headers,
     payload: fileContent,
     muteHttpExceptions: true // Prevents script from stopping on error, lets us log it
   };
-
   const response = UrlFetchApp.fetch(url, options);
   const responseCode = response.getResponseCode();
   const responseBody = response.getContentText();
@@ -117,7 +154,7 @@ function uploadToGCS(fileName, fileContent, accessToken) {
  * HOW TO SET THIS UP:
  * 1. Go to script.google.com and create a new project.
  * 2. Paste this entire code into the `Code.gs` file.
- * 3. Update the CONFIGURATION variables at the top.
+ * 3. Update the CONFIGURATION variables at the top, especially the new ALLOWED_SENDERS list.
  * 4. In Gmail, create the two labels you defined (e.g., 'process-for-cloud-function' and 'processed-by-script').
  * 5. In your Gmail settings, create a filter that applies the 'process-for-cloud-function' label to incoming mail you want to process.
  * 6. In the Apps Script Editor, go to "Services" (+ icon) and add the "Gmail API".
