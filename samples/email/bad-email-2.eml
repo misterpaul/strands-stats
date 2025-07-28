@@ -1,0 +1,98 @@
+Delivered-To: games@sennovation.com
+Received: by 2002:a05:6e04:6a49:b0:35a:e085:53d2 with SMTP id p9csp1834574imp;
+        Sat, 28 Jun 2025 17:15:36 -0700 (PDT)
+X-Received: by 2002:a05:622a:1a96:b0:4a5:aa42:49e9 with SMTP id d75a77b69052e-4a803f67ed2mr81846291cf.9.1751156136737;
+        Sat, 28 Jun 2025 17:15:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1751156136; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jE3BaM/Hf6Np2XblPlx2dGvnytQdQo//z/+ZuyOZJ9cAy36bgtLWm3I2+A4d8AEMHe
+         Ic73Fiv523vUK0sdKLxoMSX/XMYyaHBt0qRGemHgX/m6ggvpvt62oRYbVlemDxl4uGJR
+         lKXaoNjpdW0V4vROYzncuTqHJGH9RAcVIeKRtt4mzDiPaCK3XE+aT4nm+hmxtlfzRoUK
+         9XFKGkxJabMMEwuxTV1W8FBCihdYYhCgYIT6p5SBOce/kRv2Kynh8v6qUg295zt2l3ne
+         t/cc/hBZP77sBcFsjQuOPFhlKWboAyBdJrygdiobBB8EXYrAT2xcyFSJFBU5leektrZt
+         wy3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:message-id:subject:date:mime-version:from
+         :content-transfer-encoding:dkim-signature;
+        bh=UmDiKuc4V2EwRpufP3g3FwWfiONQGXfx26hb9leW5sQ=;
+        fh=2KAlKsVsoH6cPdVpKermvAzO7+HrslmM7i4KEEpyZXM=;
+        b=etML6oS57Ws94e0cQ5ZNXQsFr4MCZmbhfwDUyVKLSBn2kB4fh6ge368uMGY+8bPZJ5
+         TOq6F5X1F3nxxTJOY47Sm0c4N1BjE/OW3lUxBtjTZDXSSM3bbv6UX5hUg3SAjHlACJfH
+         2aI3/mFkmNMmTPCiLxWXYDHmuguRpBFjJaBhdzL2YydyeeRHQn4nfjnqbmWbe6di6iS4
+         SKoWmNIGcm2R/84zZfHqfBVCZk4x5lN994Yh0H+7+8DjIy3FVeTvyC9tlU5sxeNhIlHp
+         Qyifp21R+13MYFBZ2tGNe5MC1Dg+dk6UKNT1zXm12CVEdfT5zBGL/mnhgDJYcdilm3sX
+         aVKQ==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@waltzingcat-com.20230601.gappssmtp.com header.s=20230601 header.b="h/g4AJDA";
+       spf=none (google.com: paul@waltzingcat.com does not designate permitted sender hosts) smtp.mailfrom=paul@waltzingcat.com;
+       dara=pass header.i=@sennovation.com
+Return-Path: <paul@waltzingcat.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id af79cd13be357-7d443164a0csor533580685a.7.2025.06.28.17.15.36
+        for <games@sennovation.com>
+        (Google Transport Security);
+        Sat, 28 Jun 2025 17:15:36 -0700 (PDT)
+Received-SPF: none (google.com: paul@waltzingcat.com does not designate permitted sender hosts) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@waltzingcat-com.20230601.gappssmtp.com header.s=20230601 header.b="h/g4AJDA";
+       spf=none (google.com: paul@waltzingcat.com does not designate permitted sender hosts) smtp.mailfrom=paul@waltzingcat.com;
+       dara=pass header.i=@sennovation.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=waltzingcat-com.20230601.gappssmtp.com; s=20230601; t=1751156136; x=1751760936; darn=sennovation.com;
+        h=to:message-id:subject:date:mime-version:from
+         :content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UmDiKuc4V2EwRpufP3g3FwWfiONQGXfx26hb9leW5sQ=;
+        b=h/g4AJDAXnwCxgj79l+x4hlRoiced/i0Wg+Ey3oNVvpvFkx9OeEQ0jU8dKDEeYy5qg
+         8ZTzgzsNSfcrgNIuCu0OZCBLglDt0SnLrvEeshv2oP8hvy0TCuPRyPNBF3ljjbl5kJdG
+         9cSapXdEaEjIOxdNpfJN+ia/CWZwdE8vNFME2X9Pdrig9LtDfJcJ6ZJQ7jgIhzGQm/BH
+         Lt3tzqIF55nbYG2sLgB1H7geidhSabO5kj5J11t5GzWl7tYof/ZGjV2AMPBTbZhkqA0o
+         1OFP/R3RUvmGyrr2crs9uLoMIgYeCY+WHgMPZLVtMhEBldK+zIEth+g0LaGpudKEJ0LE
+         oU2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751156136; x=1751760936;
+        h=to:message-id:subject:date:mime-version:from
+         :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UmDiKuc4V2EwRpufP3g3FwWfiONQGXfx26hb9leW5sQ=;
+        b=jIjshTqP+CFiE1yRGGFFFmREfSO38hz+iZ3cSbQ+fRrKdzBaoyY4Qo+XKDafoIqtKo
+         d1ykTX3qD7JmZNUbkRf+UPrIRKK/7Z1HOiZ6QhRUOVlHpM3K4FtWRI274nFBKmTmBBe5
+         FDp4UGuT1LG1jVPhIY6QqW3rrb2YsEqCxWIdFERRUU9tHNyo+0693+0ol+xp/15O1VBo
+         UJLgtS4DQ+grNUQu4hYL7vj7x0Oa4RzlA03RzQ7zpzY27K9mx8bNseyfBCxrdiy1Qh1N
+         0qMvRAc6PYwJSsRJPIlgRd9e3Kpe7nNcFO7DSzGGFdWWo8yUJ+GZ3KfXen+YX7Yymb1B
+         5EUw==
+X-Gm-Message-State: AOJu0YxQihKigSaa52moeQ60ImO7c+GO6kyikt8AYkGkUAkEAThTzghr
+	KhRCJHMNBb7tMCcS+AQkzRjK3Pt0GxET1sZN7CCgtCwh+K5/cN1TfsuJI9XHmbaeM/RVaixzBrm
+	uNjhu
+X-Gm-Gg: ASbGncvRSNzUIG5kmDBiHqZ37H4WqX2UleEeKQFQg3iY1HQ4roMWf9pY5k4WLQOoIdR
+	GgKf54U/J/3rZH0mINIQLYK42nCPbAIislUkF1KDepA1Qa9WJ4zt4UDVHLoH5dAkVnez8E3+GiA
+	ffrypCzB1z8Zi7rOAVOPvD4GqfTU38R2R1H0DWhkusW1HmDuT8Tj0HJXUryJFoMZoZuvT+/uIi/
+	DsRPoBVHuDsoTAN2/O38ceGa7H3ieWHUB26aEwHDg0RvhfPziwkMtkQdDfECyNtMBALfMBg9XSe
+	bo4V45ykoql1+NDmYTuKBKK6NdVmZFFLLMCNBZamp3Lbxtp1e5BR2KfoanHbZut/4tcPKTa4v7I
+	id9ooGj7EPT+qkuULBQdg1s7j1E5pX0Hm9LXJ2k5IVg==
+X-Google-Smtp-Source: AGHT+IHx2IK1LtqI598N60eaKU85qnvJYaQ41h01GZDFGtPoS9deMeJPQFxBMrkFcq4Pukbc0Cjr5g==
+X-Received: by 2002:a05:620a:4082:b0:7d4:3b5f:9bac with SMTP id af79cd13be357-7d4439a2e50mr1223776085a.56.1751156136027;
+        Sat, 28 Jun 2025 17:15:36 -0700 (PDT)
+Return-Path: <paul@waltzingcat.com>
+Received: from smtpclient.apple (syn-074-077-170-041.res.spectrum.com. [74.77.170.41])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd77324d5esm43786566d6.124.2025.06.28.17.15.35
+        for <games@sennovation.com>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Jun 2025 17:15:35 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: Paul Faulstich <paul@waltzingcat.com>
+Mime-Version: 1.0 (1.0)
+Date: Sat, 28 Jun 2025 20:15:35 -0400
+Subject: Strands
+Message-Id: <3E87B2DC-6389-4D30-86BA-A29063BCAC17@waltzingcat.com>
+To: games@sennovation.com
+X-Mailer: iPhone Mail (22F76)
+
+Strands #482
+=E2=80=9C... not included=E2=80=9D
+=F0=9F=9F=A1=F0= junk in the middle 9F=94=B5=F0=9F=94=B5=F0=9F=94=B5
+=F0=9F=94=B5=F0=9F=94=B5
+
+Sent from my mobile device. Pardon teh typos.=
