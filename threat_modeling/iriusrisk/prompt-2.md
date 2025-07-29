@@ -1,0 +1,1 @@
+Close, but not quite. The Google App Script box should say "Saves email". We should have a box above it for GMail that receives incoming emails. We should have a box for the user. The user registers using Google App Engine. The user also sends the email to Gmail

@@ -11,7 +11,13 @@ Accounts involved:
 * Email account (games) - safari
   * App Script owner
   * Temporarily Storage Bucket Admin on the Bucket just for linking the apps script
-  * Storage Object Creator on the specific bucket
+  * Storage Object Creator on the snvn-emails & snvn-email-testing bucket 
+  * Storage Object Admin on the snvn-email-testing, snvn-email-success-testing, & snvn-email-failures-testing buckets to allow local testing with that account
+  * Firestore user. Unfortunately Firestore/Datastore only supports project-level permissions through GCP IAM. Any database-level permissioning is done via Firestore rules.
+  * During local testing, this is the account to use for application default credentials (ADC) using `gcloud auth application-default login`
+* Cloud Function service account
+  * Storage object admin on the snvn-emails, snvn-email-success, & snvn-email-failures buckets.
+  * Firestore user. Consider using Firestore rules to further control access (eg separate test/prod service accounts should have access only to the relevant databases.
 
 # Email
 A special mailbox setup for account games@sennovation.com to recieve emails. An Apps Script runs every N minutes (N can be set)
@@ -32,15 +38,19 @@ We have a Filter in the mailbox that identifies relevant emails and applies a la
 
 **snvn-strands-stats-tf**: this appears to be a bucket I created for storing terraform state. I will probably delete this, as for this project, I think Terraform may be overkill, especially since it isn't great for deploying Cloud Functions.
 
-**snvn-emails** 
+**snvn-emails**, **snvn-email-testing**
 * uniform bucket policy
 * 7 day soft delete
 * enforce not public
-* added lifecycle policy to delete any object over 30 days old. Should reduce this once things are up and running smoothly. Cloud Function might also delete.
+* added lifecycle policy to delete any object over 30 days old. Should reduce this once things are up and running smoothly. Cloud Function might also delete. (not added to testing bucket)
 * Region: central1 (low cost, low CO2 (east1 has higher CO2))
 
-**snvn-email-failures**
+**snvn-email-failures**, **snvn-email-failures-testing**
 * same as above
+
+**snvn-email-success**, **snvn-email-success-testing**
+* same as above
+
 
 # App Script
 
@@ -59,14 +69,16 @@ It is important for this logic to be at this stage to prevent a user that sends 
 # Firestore Databases
 All databases not public, use Google-managed encryption
 
-## accounts
+## accounts, accounts-testing
 
 * creation date
 * hashed email (salted? if so, with what?)
 * password - hashed (salted with creation date?)
+* handle - how you'll be known to others who you allow to see your data
+* visibility - what visibility to allow user's data. (all private, stats friends, all friends, stats public, all public; Or maybe stats:private/friends/public; raw:private/friends/public)
 * account UUID - not sure this is necessary, why not just use hashed email?
 
-## games
+## games, games-testing
 
 * date
 * hashed email
