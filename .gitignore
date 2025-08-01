@@ -134,3 +134,26 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Ignore Node.js dependencies
+node_modules/
+npm-debug.log
+
+# Ignore local Terraform/OpenTofu state and configuration files
+tofu/.terraform/
+tofu/.terraform.lock.hcl
+tofu/*.tfstate
+tofu/*.tfstate.*
+tofu/*.tfplan
+
+# --- IMPORTANT: Ignore sensitive variable files ---
+tofu/*.tfvars
+tofu/*.tfvars.json
+
+# Ignore .zip files
+**/*.zip
+**/*.tar
+**/*.gz#
+
+# Ignore Mac .DS_Store
+**/.DS_Store

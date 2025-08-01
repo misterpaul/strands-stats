@@ -1,0 +1,16 @@
+{
+  "name": "strands-stats-dataloader",
+  "version": "1.0.0",
+  "description": "Cloud Function to process Strands game data from emails.",
+  "main": "index.js",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.3.0",
+    "@google-cloud/firestore": "^7.7.0",
+    "@google-cloud/storage": "^7.10.0",
+    "mailparser": "^3.7.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "20"
+  }
+}
