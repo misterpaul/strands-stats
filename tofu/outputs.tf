@@ -1,9 +1,5 @@
 # outputs.tf
 
-# Data source to get the project number for the command below
-data "google_project" "project" {
-}
-
 # Attempt to read the IAM policy of the function's underlying Cloud Run service.
 # This will fail on the first 'tofu apply' when the service doesn't exist yet,
 # which is handled gracefully by the `try()` function in the locals block.

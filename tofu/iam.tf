@@ -29,6 +29,10 @@ resource "google_project_iam_member" "eventarc_receiver" {
   member  = "serviceAccount:${google_service_account.function_sa.email}"
 }
 
+# Data source to get the project number for constructing the Eventarc SA email
+data "google_project" "project" {
+}
+
 # Get the identity of the GCS service agent
 data "google_storage_project_service_account" "gcs_sa" {
 }
@@ -43,8 +47,14 @@ resource "google_project_iam_member" "gcs_sa_pubsub_publisher" {
   member = "serviceAccount:${data.google_storage_project_service_account.gcs_sa.email_address}"
 }
 
-# --- NOTE on run.invoker permission ---
-# The 'roles/run.invoker' permission for the Eventarc service agent creates a
-# circular dependency if defined here. It's best practice to grant this
-# with a gcloud command after the first 'tofu apply'. An `outputs.tf` file
-# can generate the exact command needed.
+# Grant the function's own service account permission to invoke the function.
+# This is required because the Eventarc trigger, when created via the
+# google_cloudfunctions2_function resource, uses the function's identity
+# as the invoker, not the Eventarc service agent.
+resource "google_cloud_run_service_iam_member" "function_self_invoker" {
+  location = google_cloudfunctions2_function.function.location
+  project  = google_cloudfunctions2_function.function.project
+  service  = google_cloudfunctions2_function.function.name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.function_sa.email}"
+}

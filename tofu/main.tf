@@ -53,6 +53,9 @@ resource "google_cloudfunctions2_function" "function" {
     trigger_region = var.region
     event_type     = "google.cloud.storage.object.v1.finalized"
     retry_policy   = "RETRY_POLICY_RETRY"
+    # This is the critical missing piece. We must explicitly tell the trigger
+    # to use our function's service account to invoke the function.
+    service_account_email = google_service_account.function_sa.email
     event_filters {
       attribute = "bucket"
       value     = google_storage_bucket.app_buckets["emails"].name
