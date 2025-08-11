@@ -12,6 +12,12 @@ variable "project_id" {
   default     = "strands-stats"
 }
 
+variable "project_number" {
+  type        = string
+  description = "The number of the Google Cloud project."
+  default     = "540383331221"
+}
+
 variable "region" {
   type        = string
   description = "The region where resources will be deployed."

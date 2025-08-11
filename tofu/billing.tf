@@ -11,7 +11,7 @@ resource "google_billing_budget" "budget" {
   display_name    = "Strands Stats Budget (${var.environment})"
 
   budget_filter {
-    projects = ["projects/${var.project_id}"]
+    projects = ["projects/${var.project_number}"]
   }
 
   amount {

@@ -67,5 +67,6 @@ resource "google_cloudfunctions2_function" "function" {
     google_project_service.apis,
     # Explicitly wait for the GCS service agent to get pub/sub publisher permissions.
     google_project_iam_member.gcs_sa_pubsub_publisher,
+    google_project_iam_member.eventarc_receiver,
   ]
 }
