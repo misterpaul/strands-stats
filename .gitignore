@@ -157,3 +157,8 @@ tofu/*.tfvars.json
 
 # Ignore Mac .DS_Store
 **/.DS_Store
+
+# Things very specific to this app and file structure
+**/allowed_senders.txt
+holding_bin/
+cloud_fn_simple_source/

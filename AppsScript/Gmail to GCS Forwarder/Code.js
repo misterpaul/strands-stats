@@ -26,8 +26,8 @@ const GMAIL_PROCESSING_ERROR = 'processing-error';
 // 6. A list of sender email addresses that are allowed to be processed.
 //    Emails from senders NOT in this list will be skipped.
 const ALLOWED_SENDERS = [
-  'jane.doe@example.com',
-  'john.smith@example.com'
+  'jacky.doe@example.com',
+  'jimmi.smith@example.com'
   // Add more authorized email addresses here
 ];
 
@@ -37,16 +37,20 @@ const ALLOWED_SENDERS = [
  * and then updates their labels.
  */
 function processNewEmails() {
-  // confirm all labels exist
+  // Confirm all required labels exist before starting.
   const labelArray = [GMAIL_PROCESSING_LABEL, GMAIL_PROCESSED_LABEL, GMAIL_INVALID_SENDER, GMAIL_PROCESSING_ERROR];
-  labelArray.forEach(item => {
-    const label = Gmail.Users.Labels.get('me', item);
+  for (const labelName of labelArray) {
+    // Use the built-in GmailApp service which returns null if a label is not found, instead of throwing an error.
+    const label = GmailApp.getUserLabelByName(labelName);
     if (!label) {
-      console.error(`Error: Processing label "${item}" not found. Please create it in Gmail.`);
-      return;
+      console.error(`FATAL: Gmail label "${labelName}" not found. Please create it in your Gmail settings before running the script.`);
+      return; // Stop execution if a required label is missing.
     }
-  });
+  }
   
+  // Create a lowercased version of the allowed senders list for case-insensitive comparison.
+  const allowedSendersLower = ALLOWED_SENDERS.map(email => email.toLowerCase());
+
   // Search for threads with the processing label but not the processed label
   const query = `label:${GMAIL_PROCESSING_LABEL} -label:${GMAIL_PROCESSED_LABEL}`;
   const threads = GmailApp.search(query);
@@ -83,7 +87,7 @@ function processNewEmails() {
         }
 
         // Check if the sender is in the allowed list
-        if (ALLOWED_SENDERS.includes(senderEmail)) {
+        if (allowedSendersLower.includes(senderEmail.toLowerCase())) {
           console.log(`Processing message: "${message.getSubject()}" (ID: ${message.getId()}) from allowed sender.`);
 
           // Get the raw RFC 822 formatted email content
