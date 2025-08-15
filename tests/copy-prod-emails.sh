@@ -1,0 +1,1 @@
+gsutil cp -r gs://snvn-emails gs://snvn-emails-dev

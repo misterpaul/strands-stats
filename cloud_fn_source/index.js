@@ -25,38 +25,37 @@ const {
 function parseEmailForGameData(emailBody, parsedEmail) {
     const gameData = {
         sender: parsedEmail.from?.value[0]?.address || null,
-        game: parsedEmail.subject || null,
+        gameSubject: parsedEmail.subject || null,
         gameNumber: null,
         gameTitle: null,
         results: null,
         processedAt: new Date().toISOString()
     };
 
-    const gameNumberRegex = /Strands\s+#(\d+)/;
-    const gameNumberMatch = emailBody.match(gameNumberRegex);
-    if (gameNumberMatch && gameNumberMatch[1]) {
-        gameData.gameNumber = parseInt(gameNumberMatch[1], 10);
+    /*
+    Email body is structured like this:
+    Strands <game number>
+    <game title>
+    <score>
+    <score>
+    ...
+
+    potentially additional data like email signature
+    */
+
+    const gameDataRegex = /Strands\s+#(\d+)\s+“([^”]+)”\s+([\p{Emoji}\s]+)/u;
+    const emailMatches = emailBody.match(gameDataRegex);
+    console.log(`emailMatches: ${emailMatches}`);
+
+    if (emailMatches && emailMatches.length >= 4) {
+        gameData.gameNumber = parseInt(emailMatches[1], 10);
+        gameData.gameTitle = emailMatches[2];
+        gameData.results = emailMatches[3].replace(/(\r\n|\n|\r)/g, "");
+    } else {
+        console.log(`emaillMatches: ${emailMatches}`);
+        throw new Error("Missing data: Could not parse game data from email body.");
     }
 
-    const gameTitleRegex = /“([^”]+)”/;
-    const gameTitleMatch = emailBody.match(gameTitleRegex);
-    if (gameTitleMatch && gameTitleMatch[1]) {
-        gameData.gameTitle = gameTitleMatch[1];
-    }
-
-    const lines = emailBody.split('\n');
-    const resultsLines = [];
-    const emojiLineRegex = /^[\p{Emoji}\s]+$/u;
-    for (const line of lines) {
-        const trimmedLine = line.trim();
-        if (trimmedLine !== '' && emojiLineRegex.test(trimmedLine)) {
-            resultsLines.push(trimmedLine);
-        }
-    }
-    if (resultsLines.length > 0) {
-        gameData.results = resultsLines.join('');
-    }
-    
     // --- Validate extracted game data ---
     if (!gameData.sender) throw new Error("Missing data: Could not determine sender's email address.");
     if (gameData.gameNumber === null) throw new Error("Missing data: Could not parse Game Number from email body.");
