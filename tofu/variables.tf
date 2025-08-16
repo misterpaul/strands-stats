@@ -15,8 +15,19 @@ variable "project_id" {
 variable "project_number" {
   type        = string
   description = "The number of the Google Cloud project."
-  default     = "540383331221"
 }
+
+variable "oauth_app_title" {
+  description = "The application title displayed on the OAuth consent screen."
+  type        = string
+  default     = "Game Stats"
+}
+
+variable "oauth_support_email" {
+  description = "The support email address displayed on the OAuth consent screen."
+  type        = string
+}
+
 
 variable "region" {
   type        = string
