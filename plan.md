@@ -77,5 +77,8 @@
     *   [ ] Submit app for verification
     *   [ ] Publish Oauth App from Google Auth Platform / Audience
 
+*  **[ ] Professional details
+    *   [ ] Create a Privacy Policy and Terms of Service 
+
 
 ## Phase 5: Marketing
