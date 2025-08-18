@@ -304,3 +304,35 @@ Here is the corrected diff for /Users/paul/Code/gh/strands-stats2/games-stats-gu
 
 With these clarifications and corrected code changes, you should now have a clean project structure ready for you to run `npm run dev` and test the authentication flow.
 
+# Request
+
+Ok, it runs. But, I don't see a way to authenticate, and we have 41 errors in the Browser's console:
+
+(errors not shown)
+
+# Response
+
+You've run into a very common issue when working with environment variables in modern JavaScript frameworks. The good news is that the console logs point us directly to the solution.
+
+While there are many "noisy" errors in that log that appear to be from a browser extension (like a password manager), the critical error is this one:
+
+Uncaught (in promise) Error: Prop client id required since plugin is not initialized with a client id
+
+This error means that when the vue3-google-login plugin tried to initialize, the value for clientId was undefined. This happens because the Vite development server only reads .env files (like your .env.local) when it first starts up.
+
+If you created or modified the .env.local file while the server was already running, it won't see the VITE_GOOGLE_CLIENT_ID variable.
+
+The Solution: Restart the Dev Server
+Go to the terminal where npm run dev is running.
+Stop the server by pressing Ctrl+C.
+Restart the server by running npm run dev again.
+This will force Vite to load your .env.local file, and the Google Sign-In button should now appear and function correctly.
+
+Code Quality Improvement: Persisting Login State
+Once you have the login working, you'll notice that if you refresh the page after logging in, you'll be logged out again. This is because the user's state is only stored in memory.
+
+A best practice is to persist the login state in the browser's sessionStorage. This will keep the user logged in across page reloads during their session.
+
+Here is an update to your auth.ts store that implements this improvement. It checks sessionStorage when the app loads and saves the user's profile upon successful login.
+
+# IT WORKS!

@@ -1,3 +1,5 @@
+// This Pinia store manages the user's authentication state, including
+// login status and profile information, with persistence to sessionStorage.
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
@@ -29,4 +31,3 @@ export const useAuthStore = defineStore('auth', () => {
 
   return { isLoggedIn, userProfile, login, logout }
 })
-
