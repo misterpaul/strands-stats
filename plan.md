@@ -35,7 +35,8 @@
 ## Phase 2: Web Application Frontend
 
 *   **[ ] Infrastructure as Code (Managed by OpenTofu)**
-    *   [ ] Configure Firebase Hosting (or App Engine) for the frontend.
+    *   [ ] Configure App Engine for the frontend:
+        *   [x] Enable App Engine application via OpenTofu.
     *   [ ] Configure Google Identity (Manual Step):
         *   [x] Manually configure OAuth Consent Screen in the GCP Console.
         *   [x] Manually create OAuth 2.0 Client ID for the web app and add to Secret Manager
@@ -43,8 +44,10 @@
         *   [x] Configure scopes in Google Auth Platform / Data Access? (tofu? manual?) - According to Gemini, not needed b/c basic scopes are added by default when we use Google Identity
 
 *   **[ ] GUI Development (Vue.js)**
-    *   [ ] Create basic Vue app structure using Vite.
-    *   [ ] Implement "Sign in with Google" using the OAuth Client ID.
+    *   [x] Create basic Vue app structure using Vite.
+    *   [x] Implement "Sign in with Google" using the OAuth Client ID locally.
+    *   [x] Create `app.yaml` for App Engine deployment.
+    *   [x] Deploy application to App Engine.
     *   [ ] Build welcome screen for unauthenticated users.
     *   [ ] Build dashboard for authenticated users to view their data from Firestore.
 
@@ -61,7 +64,11 @@
 
 
 *   **[ ] Security Testing**
-    *   [ ] SAST testing
+    *   [ ] SAST (Static Application Security Testing)
+        *   [x] Implement dependency scanning (`npm audit`).
+        *   [x] Add security linting rules (`eslint-plugin-security`).
+        *   [ ] Add ESLint to vscode
+        *   [ ] Add GitHub Code Scanning
     *   [ ] DAST testing
     *   [ ] Fuzzing
     *   [ ] Pen Testing

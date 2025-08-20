@@ -1,0 +1,22 @@
+# This file configures the App Engine service for the Vue.js frontend.
+runtime: nodejs22 # A modern, stable runtime is required even for static sites.
+
+instance_class: F1 # Use the smallest, most cost-effective instance class.
+
+# This section configures how URLs are mapped to your application's files.
+handlers:
+  # This handler serves static files (like CSS, JS, images) that have a file extension.
+  # The regex matches any URL path that contains a dot, followed by one or more characters.
+  # It maps them to the corresponding file in the 'dist' directory, which is where
+  # Vite places the built application assets.
+  - url: /(.*\..+)$
+    static_files: dist/\1
+    upload: dist/(.*\..+)$
+
+  # This is the "catch-all" handler for a Single-Page Application (SPA).
+  # It matches all other URLs (e.g., '/', '/dashboard', '/profile') and serves
+  # the main index.html file. This allows Vue Router to take over and handle
+  # the routing on the client-side.
+  - url: /.*
+    static_files: dist/index.html
+    upload: dist/index.html
