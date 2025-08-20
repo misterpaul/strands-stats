@@ -181,7 +181,7 @@ Congratulations, your application is now live on App Engine!
 build failed
 
 ```
-eslint.config.ts:5:28 - error TS7016: Could not find a declaration file for module 'eslint-plugin-security'. '/Users/paul/Code/gh/strands-stats2/games-stats-gui/node_modules/eslint-plugin-security/index.js' implicitly has an 'any' type.
+eslint.config.ts:5:28 - error TS7016: Could not find a declaration file for module 'eslint-plugin-security'. '1. /Code/gh/strands-stats2/games-stats-gui/node_modules/eslint-plugin-security/index.js' implicitly has an 'any' type.
   Try `npm i --save-dev @types/eslint-plugin-security` if it exists or add a new declaration (.d.ts) file containing `declare module 'eslint-plugin-security';`
 
 5 import pluginSecurity from 'eslint-plugin-security'
@@ -251,7 +251,7 @@ You've asked some excellent questions that get to the heart of how modern TypeSc
 ## 1. Where should shims-eslint.d.ts go?
 You are correct, this file belongs inside the `games-stats-gui` project. The best practice is to create a dedicated directory for custom type definitions (`.d.ts` files) to keep your project organized.
 
-**The correct location is:** `/Users/paul/Code/gh/strands-stats2/games-stats-gui/src/types/shims-eslint.d.ts`
+**The correct location is:** `1. /Code/gh/strands-stats2/games-stats-gui/src/types/shims-eslint.d.ts`
 
 I will create this file for you now.
 
@@ -260,7 +260,7 @@ This is a great question, and the answer lies in the way your project's TypeScri
 
 The root `tsconfig.json` file in your project simply uses references to point to other, more specific configuration files. The one that matters for your application's source code is `tsconfig.app.json`.
 
-If you look inside `/Users/paul/Code/gh/strands-stats2/games-stats-gui/tsconfig.app.json`, you will see an include array:
+If you look inside `1. /Code/gh/strands-stats2/games-stats-gui/tsconfig.app.json`, you will see an include array:
 
 ```
 // tsconfig.app.json
@@ -354,7 +354,7 @@ We need to add `"composite": true` to the `compilerOptions` in `tsconfig.app.jso
 
 ### 2. Update `tsconfig.node.json` and `tsconfig.vitest.json`
 
-Please open the other two referenced files, `/Users/paul/Code/gh/strands-stats2/games-stats-gui/tsconfig.node.json` and `/Users/paul/Code/gh/strands-stats2/games-stats-gui/tsconfig.vitest.json`, and make the same change. Add the line `"composite": true`, inside their respective compilerOptions blocks.
+Please open the other two referenced files, `~/Code/gh/strands-stats2/games-stats-gui/tsconfig.node.json` and `~/Code/gh/strands-stats2/games-stats-gui/tsconfig.vitest.json`, and make the same change. Add the line `"composite": true`, inside their respective compilerOptions blocks.
 
 Fixing this primary configuration error should resolve all the other downstream errors you're seeing, including the ones related to `@tsconfig/node22` and `@vitejs/plugin-vue`, as the compiler will now be able to correctly interpret the project structure.
 
