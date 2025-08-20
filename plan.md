@@ -46,8 +46,7 @@
 *   **[ ] GUI Development (Vue.js)**
     *   [x] Create basic Vue app structure using Vite.
     *   [x] Implement "Sign in with Google" using the OAuth Client ID locally.
-    *   [x] Create `app.yaml` for App Engine deployment.
-    *   [x] Deploy application to App Engine.
+    *   [ ] Create `app.yaml` for App Engine deployment.
     *   [ ] Build welcome screen for unauthenticated users.
     *   [ ] Build dashboard for authenticated users to view their data from Firestore.
 
@@ -70,6 +69,7 @@
         *   [ ] Add ESLint to vscode
         *   [ ] Add GitHub Code Scanning
     *   [ ] DAST testing
+        *   [ ] Explicitly test that the static files and route handling do not allow path Traversal.  See #35 line 111
     *   [ ] Fuzzing
     *   [ ] Pen Testing
 
