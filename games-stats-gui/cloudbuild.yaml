@@ -1,0 +1,28 @@
+# This file defines a custom Cloud Build process for deploying the App Engine app.
+# This gives us more control over the build environment and service account used.
+steps:
+  # Step 1: Install dependencies and build the Vue application.
+  # We remove the package-lock.json first. This is a best practice in CI/CD
+  # to prevent "works on my machine" errors caused by mismatches between
+  # the local npm version and the version in the build environment.
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['rm', '-f', 'package-lock.json']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['run', 'build']
+
+  # Step 2: Deploy the built application to App Engine.
+  # The `gcloud` builder automatically uses the specified service account.
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', 'app.yaml', '--project', '${PROJECT_ID}']
+
+# Specify the service account for the build steps to run as.
+# This must be the full resource name of the service account.
+serviceAccount: 'projects/strands-stats/serviceAccounts/540383331221-compute@developer.gserviceaccount.com'
+
+options:
+  # When specifying a custom service account for a build, we must also specify
+  # the logging mode. CLOUD_LOGGING_ONLY is the simplest option, sending logs
+  # directly to Cloud Logging without requiring a separate GCS bucket.
+  logging: CLOUD_LOGGING_ONLY
